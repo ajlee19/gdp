@@ -1,9 +1,10 @@
 import tensorflow as tf
-import tf_util
 import numpy as np
 import math
 import sys
 import os
+import tf_util
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, '../utils'))
