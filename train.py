@@ -2,8 +2,8 @@ import argparse
 import math
 import h5py
 import numpy as np
-# import torchvision
-# import tf_util
+import tensorflow as tf
+import tf_util
 import socket
 import importlib
 import os
