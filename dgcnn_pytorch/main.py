@@ -162,8 +162,8 @@ if __name__ == "__main__":
 
     train(args, io)
 
-    io.cprint("Averate training loss: ", sum(train_losslst)/len(train_losslst))
-    io.cprint("Averate training accuracy: ", sum(train_acclst)/len(train_acclst))
-    io.cprint("Averate testing loss: ", sum(test_losslst)/len(test_losslst))
-    io.cprint("Averate testing accuracy: ", sum(test_acclst)/len(test_acclst))
+    io.cprint("Averate training loss: " + str(sum(train_losslst)/len(train_losslst)))
+    io.cprint("Averate training accuracy: " + str(sum(train_acclst)/len(train_acclst)))
+    io.cprint("Averate testing loss: " + str(sum(test_losslst)/len(test_losslst)))
+    io.cprint("Averate testing accuracy: " + str(sum(test_acclst)/len(test_acclst))))
 
