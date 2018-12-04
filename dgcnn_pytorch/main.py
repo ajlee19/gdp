@@ -94,8 +94,8 @@ def train(args, io):
             train_loss += loss.item() * batch_size
             train_acc += (preds == label).sum().item()
         outstr = 'Train %d, loss: %.6f, acc: %.6f'%(epoch, train_loss*1.0/count, train_acc*1.0/count)
-        train_losslst.append(train_loss)
-        train_acclst.append(train_acc)
+        train_losslst.append(train_loss*1.0/count)
+        train_acclst.append(train_acc*1.0/count)
         io.cprint(outstr)
 
         ####################
@@ -115,8 +115,8 @@ def train(args, io):
             test_loss += loss.item() * batch_size
             test_acc += (preds == label).sum().item()
         outstr = 'Test %d, loss: %.6f, acc: %.6f'%(epoch, test_loss*1.0/count, test_acc*1.0/count)
-        test_losslst.append(test_loss)
-        test_acclst.append(test_acc)
+        test_losslst.append(test_loss*1.0/count)
+        test_acclst.append(test_acc*1.0/count)
         io.cprint(outstr)
         if test_acc >= best_test_acc:
             best_test_acc = test_acc
