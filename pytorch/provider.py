@@ -1,7 +1,10 @@
 import os
 import sys
+# import glob
 import numpy as np
 import h5py
+from torch.utils.data import Dataset
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
@@ -102,3 +105,40 @@ def load_h5_data_label_seg(h5_filename):
 
 def loadDataFile_with_seg(filename):
     return load_h5_data_label_seg(filename)
+
+### YUE
+def load_data(partition):
+    download()
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = os.path.join(BASE_DIR, 'data')
+    all_data = []
+    all_label = []
+    for h5_name in glob.glob(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048', 'ply_data_%s*.h5'%partition)):
+        f = h5py.File(h5_name)
+        data = f['data'][:].astype('float32')
+        label = f['label'][:].astype('int64')
+        f.close()
+        all_data.append(data)
+        all_label.append(label)
+    all_data = np.concatenate(all_data, axis=0)
+    all_label = np.concatenate(all_label, axis=0)
+    return all_data, all_label
+
+
+class ModelNet40(Dataset):
+    def __init__(self, num_points, partition='train'):
+        self.data, self.label = load_data(partition)
+        self.num_points = num_points
+
+    def __getitem__(self, item):
+        return self.data[item][:self.num_points], self.label[item]
+
+    def __len__(self):
+        return self.data.shape[0]
+
+if __name__ == '__main__':
+    train = ModelNet40(1024)
+    test = ModelNet40(1024, 'test')
+    for data, label in train:
+        print(data.shape)
+        print(label.shape)
