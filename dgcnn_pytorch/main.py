@@ -21,6 +21,10 @@ from model import PointNet, ResPointNet, DGCNN
 import numpy as np
 from torch.utils.data import DataLoader
 
+train_losslst = []
+train_acclst = []
+test_losslst = []
+test_acclst = []
 
 class IOStream():
     def __init__(self, path):
@@ -90,6 +94,8 @@ def train(args, io):
             train_loss += loss.item() * batch_size
             train_acc += (preds == label).sum().item()
         outstr = 'Train %d, loss: %.6f, acc: %.6f'%(epoch, train_loss*1.0/count, train_acc*1.0/count)
+        train_losslst.append(train_loss)
+        train_acclst.append(train_acc)
         io.cprint(outstr)
 
         ####################
@@ -109,6 +115,8 @@ def train(args, io):
             test_loss += loss.item() * batch_size
             test_acc += (preds == label).sum().item()
         outstr = 'Test %d, loss: %.6f, acc: %.6f'%(epoch, test_loss*1.0/count, test_acc*1.0/count)
+        test_losslst.append(test_loss)
+        test_acclst.append(test_acc)
         io.cprint(outstr)
         if test_acc >= best_test_acc:
             best_test_acc = test_acc
@@ -124,7 +132,7 @@ if __name__ == "__main__":
                         help='Size of batch)')
     parser.add_argument('--test_batch_size', type=int, default=32, metavar='batch_size',
                         help='Size of batch)')
-    parser.add_argument('--epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of episode to train ')
     parser.add_argument('--use_sgd', action='store_true', default=False,
                         help='Use SGD')
@@ -153,3 +161,9 @@ if __name__ == "__main__":
         io.cprint('Using CPU')
 
     train(args, io)
+
+    io.cprint("Averate training loss: ", sum(train_losslst)/len(train_losslst))
+    io.cprint("Averate training accuracy: ", sum(train_acclst)/len(train_acclst))
+    io.cprint("Averate testing loss: ", sum(test_losslst)/len(test_losslst))
+    io.cprint("Averate testing accuracy: ", sum(test_acclst)/len(test_acclst))
+
