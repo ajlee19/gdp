@@ -121,6 +121,9 @@ def train(args, io):
         if test_acc >= best_test_acc:
             best_test_acc = test_acc
             torch.save(model, 'checkpoints/%s/models/model.t7' % args.exp_name)
+        
+        io.cprint("Averate testing accuracy: " + str(sum(test_acclst)/len(test_acclst)) + '----------------------\n')
+
 
 
 if __name__ == "__main__":
